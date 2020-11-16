@@ -1,0 +1,14 @@
+{
+  "name": "traction-desafio",
+  "version": "1.0.0",
+  "description": "Desafio para o processo seletivo de estagio da Traction",
+  "main": "index.js",
+  "repository": "https://github.com/droderuan/traction-desafio.git",
+  "author": "Ruan Ferreira",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "typescript": "^4.0.5"
+  }
+}
