@@ -29,6 +29,34 @@ class UserController {
 
     return response.json(newUser);
   }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+
+    const { name, email } = <IRequest>request.body;
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: id },
+      { name, email },
+      { new: true, useFindAndModify: false },
+    );
+
+    return response.json(updatedUser);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const { userId } = request.body;
+
+    const user = await UserModel.findOne({ _id: userId });
+
+    if (!user) {
+      throw new AppError('User does not exist', 400);
+    }
+
+    user.remove();
+
+    return response.status(204).json();
+  }
 }
 
 export default UserController;

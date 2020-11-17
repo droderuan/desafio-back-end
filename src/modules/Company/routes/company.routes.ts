@@ -40,4 +40,14 @@ companyRoutes.put(
   companyController.update,
 );
 
+companyRoutes.delete(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      companyId: Joi.string().required(),
+    },
+  }),
+  companyController.delete,
+);
+
 export default companyRoutes;

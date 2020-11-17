@@ -23,4 +23,11 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
+UserSchema.pre<IUserDoc>('remove', async function (this: IUserDoc, next) {
+  await this.model('Company').findOneAndUpdate(
+    { _id: this.company },
+    { $pull: { employeers: this._id } },
+  );
+});
+
 export default model<IUserDoc>('User', UserSchema);
