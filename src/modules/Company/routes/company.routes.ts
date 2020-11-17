@@ -8,10 +8,10 @@ const companyController = new Companycontroller();
 const companyRoutes = Router();
 
 companyRoutes.get(
-  '/:id',
+  '/:companyId',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().required(),
+      companyId: Joi.string().required(),
     },
   }),
   companyController.index,
@@ -28,10 +28,10 @@ companyRoutes.post(
 );
 
 companyRoutes.put(
-  '/:id',
+  '/:companyId',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().required(),
+      companyId: Joi.string().required(),
     },
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -41,9 +41,9 @@ companyRoutes.put(
 );
 
 companyRoutes.delete(
-  '/',
+  '/:companyId',
   celebrate({
-    [Segments.BODY]: {
+    [Segments.PARAMS]: {
       companyId: Joi.string().required(),
     },
   }),

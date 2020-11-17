@@ -13,12 +13,18 @@ const unitSchema = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
+
+unitSchema.pre<IUnitDoc>('remove', async function (this: IUnitDoc) {
+  await this.model('Company').findOneAndUpdate(
+    { _id: this.company },
+    { $pull: { units: this._id } },
+  );
+});
 
 export default model<IUnitDoc>('Unit', unitSchema);

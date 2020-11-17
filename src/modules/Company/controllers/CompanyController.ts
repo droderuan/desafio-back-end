@@ -6,9 +6,9 @@ import CompanyModel from '../schemas/CompanyModel';
 
 class CompanyController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
+    const { companyId } = request.params;
 
-    const company = await CompanyModel.findById(id).populate([
+    const company = await CompanyModel.findById(companyId).populate([
       {
         path: 'units',
         select: { __v: 0, createdAt: 0, updatedAt: 0, company: 0 },
@@ -20,7 +20,7 @@ class CompanyController {
     ]);
 
     if (!company) {
-      throw new AppError(`Company with ${id} does not exist`, 406);
+      throw new AppError(`Company with ${companyId} does not exist`, 406);
     }
 
     return response.json(company);
@@ -43,16 +43,16 @@ class CompanyController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
+    const { companyId } = request.params;
 
     const { name } = request.body;
 
-    if (!id || !name) {
+    if (!companyId || !name) {
       throw new AppError('Id and Name required');
     }
 
     const company = await CompanyModel.findOneAndUpdate(
-      { _id: id },
+      { _id: companyId },
       { name },
       { new: true, useFindAndModify: false },
     );
@@ -61,7 +61,7 @@ class CompanyController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const { companyId } = request.body;
+    const { companyId } = request.params;
 
     const company = await CompanyModel.findById(companyId);
 

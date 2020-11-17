@@ -6,26 +6,31 @@ import UnitModel from '../schemas/UnitModel';
 
 class UnitController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
+    const { unitId } = request.params;
 
-    const unit = await UnitModel.findById(id);
+    const unit = await UnitModel.findById(unitId);
 
     return response.json(unit);
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, companyId } = request.body;
+    const { name } = request.body;
 
-    const checkUnit = await UnitModel.findOne({ name });
+    const companyId = request.company.id;
 
-    if (checkUnit) {
-      return response.status(400).json({ error: 'Unit name already exist' });
-    }
-
-    const companyToUpdate = await CompanyModel.findById(companyId);
+    const companyToUpdate = await CompanyModel.findById(companyId).populate({
+      path: 'Unit',
+      select: { name: 1 },
+    });
 
     if (!companyToUpdate) {
       throw new AppError(`Company with ${companyId} does not exist`, 406);
+    }
+
+    const checkUnit = companyToUpdate.units.find(unit => unit.name === name);
+
+    if (checkUnit) {
+      return response.status(400).json({ error: 'Unit name already exist' });
     }
 
     const unit = new UnitModel({ name, company: companyId });
@@ -40,12 +45,12 @@ class UnitController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
+    const { unitId } = request.params;
 
     const { name } = request.body;
 
     const unit = await UnitModel.findOneAndUpdate(
-      { _id: id },
+      { _id: unitId },
       { name },
       { new: true, useFindAndModify: false },
     );
@@ -54,13 +59,9 @@ class UnitController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const { id } = request.body;
+    const { unitId } = request.params;
 
-    const unit = await UnitModel.findOneAndUpdate(
-      { _id: id },
-      { isDeleted: true },
-      { new: true, useFindAndModify: false },
-    );
+    const unit = await UnitModel.find({ _id: unitId });
 
     return response.json(unit);
   }

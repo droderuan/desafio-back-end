@@ -16,6 +16,7 @@ const companySchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
     isDeleted: {
       type: Boolean,

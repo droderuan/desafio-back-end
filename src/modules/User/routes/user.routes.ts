@@ -20,10 +20,10 @@ userRoutes.post(
 );
 
 userRoutes.put(
-  '/:id',
+  '/:userId',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().required(),
+      userId: Joi.string().required(),
     },
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -33,14 +33,6 @@ userRoutes.put(
   userController.update,
 );
 
-userRoutes.delete(
-  '/',
-  celebrate({
-    [Segments.BODY]: {
-      userId: Joi.string().required(),
-    },
-  }),
-  userController.delete,
-);
+userRoutes.delete('/:userId', userController.delete);
 
 export default userRoutes;

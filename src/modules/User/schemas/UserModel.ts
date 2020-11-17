@@ -23,7 +23,7 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
-UserSchema.pre<IUserDoc>('remove', async function (this: IUserDoc, next) {
+UserSchema.pre<IUserDoc>('remove', async function (this: IUserDoc) {
   await this.model('Company').findOneAndUpdate(
     { _id: this.company },
     { $pull: { employeers: this._id } },

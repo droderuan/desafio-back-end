@@ -8,10 +8,10 @@ const unitController = new UnitController();
 const unitRoutes = Router();
 
 unitRoutes.get(
-  '/:id',
+  '/:unitId',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().required(),
+      unitId: Joi.string().required(),
     },
   }),
   unitController.index,
@@ -22,17 +22,16 @@ unitRoutes.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
-      companyId: Joi.string().required(),
     },
   }),
   unitController.create,
 );
 
 unitRoutes.put(
-  '/:id',
+  '/:unitId',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().required(),
+      unitId: Joi.string().required(),
     },
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -42,10 +41,10 @@ unitRoutes.put(
 );
 
 unitRoutes.delete(
-  '/:id',
+  '/:unitId',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().required().uuid(),
+      unitId: Joi.string().required().uuid(),
     },
   }),
   unitController.delete,
