@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
 
+import AppError from '@errors/AppError';
 import CompanyModel from '../schemas/CompanyModel';
 
 class CompanyController {
   public async index(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
 
-    const company = await CompanyModel.findById(id).populate('units');
+    const company = await CompanyModel.findById(id).populate([
+      'units',
+      'employeers',
+    ]);
+
+    if (!company) {
+      throw new AppError(`Company with ${id} does not exist`, 406);
+    }
 
     return response.json(company);
   }

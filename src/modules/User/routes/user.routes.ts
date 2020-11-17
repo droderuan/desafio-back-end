@@ -7,7 +7,7 @@ const userController = new UserController();
 
 const userRoutes = Router();
 
-userRoutes.get(
+userRoutes.post(
   '/',
   celebrate({
     [Segments.BODY]: {

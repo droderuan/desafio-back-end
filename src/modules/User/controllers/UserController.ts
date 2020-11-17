@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import AppError from '@errors/AppError';
 
+import CompanyModel from '@modules/Company/schemas/CompanyModel';
 import UserModel from '../schemas/UserModel';
 
 interface IRequest {
@@ -12,9 +14,18 @@ class UserController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email, companyId } = <IRequest>request.body;
 
-    const newUser = new UserModel({ name, email, companyId });
+    const company = await CompanyModel.findById(companyId);
+
+    if (!company) {
+      throw new AppError(`Company with ${companyId} does not exist`, 406);
+    }
+
+    const newUser = new UserModel({ name, email, company: companyId });
+
+    company.employeers.push(newUser);
 
     newUser.save();
+    company.save();
 
     return response.json(newUser);
   }

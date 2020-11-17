@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import CompanyModel from '@modules/Company/schemas/CompanyModel';
 
+import AppError from '@errors/AppError';
 import UnitModel from '../schemas/UnitModel';
 
 class UnitController {
@@ -24,7 +25,7 @@ class UnitController {
     const companyToUpdate = await CompanyModel.findById(companyId);
 
     if (!companyToUpdate) {
-      return response.status(400).json({ error: 'Company does not exist' });
+      throw new AppError(`Company with ${companyId} does not exist`, 406);
     }
 
     const unit = new UnitModel({ name, company: companyId });
