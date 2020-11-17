@@ -10,7 +10,8 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    company: { type: Schema.Types.ObjectId, ref: 'Company' },
+    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+    responsibleAssets: [{ type: Schema.Types.ObjectId, ref: 'Asset' }],
   },
   { timestamps: true },
 );
