@@ -23,6 +23,8 @@
     ],
     "rules": {
       "no-useless-constructor": "off",
+      "no-underscore-dangle": "off",
+      "no-unused-expressions": "off",
       "prettier/prettier": "error",
       "class-methods-use-this": "off",
       "camelcase": "off",
