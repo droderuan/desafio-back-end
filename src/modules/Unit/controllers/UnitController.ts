@@ -8,7 +8,10 @@ class UnitController {
   public async index(request: Request, response: Response): Promise<Response> {
     const { unitId } = request.params;
 
-    const unit = await UnitModel.findById(unitId);
+    const unit = await UnitModel.findById(unitId).populate({
+      path: 'assets',
+      select: { __v: 0, updatedAt: 0, createdAt: 0 },
+    });
 
     return response.json(unit);
   }

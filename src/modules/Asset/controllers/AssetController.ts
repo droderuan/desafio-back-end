@@ -75,9 +75,13 @@ export default class AssetController {
       IUpdateRequest
     >request.body;
 
-    const assetToUpdate = await AssetModel.findById(assetId);
+    const updatedAsset = await AssetModel.findOneAndUpdate(
+      { _id: assetId },
+      { name, state, modelName, type, description, healthscore },
+      { new: true, useFindAndModify: false },
+    );
 
-    if (!assetToUpdate) {
+    if (!updatedAsset) {
       throw new AppError('Asset does not exist. Please, check the id');
     }
 
@@ -87,32 +91,23 @@ export default class AssetController {
       throw new AppError('Unit does not exist. Please, check the id');
     }
 
-    assetToUpdate.name = name;
-    assetToUpdate.state = state;
-    assetToUpdate.modelName = modelName;
-    assetToUpdate.description = description;
-    assetToUpdate.healthscore = healthscore;
-    assetToUpdate.type = type;
-
-    assetToUpdate.save();
-
-    if (assetToUpdate.unit.id !== unitId) {
+    if (updatedAsset.unit?.id !== unitId) {
       const unitToUpdate = await UnitModel.findById(unitId);
       if (unitToUpdate) {
         unitToUpdate.assets = unitToUpdate.assets.filter(
-          asset => asset.id !== assetToUpdate.id,
+          asset => asset.id !== updatedAsset.id,
         );
 
         unitToUpdate.save();
       }
-      unit.assets.push(assetToUpdate);
+      unit.assets.push(updatedAsset);
     }
 
     await unit.save();
 
-    assetToUpdate.populate('responsible');
+    updatedAsset.populate('responsible');
 
-    return response.json(assetToUpdate);
+    return response.json(updatedAsset);
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {

@@ -51,7 +51,7 @@ assetRoutes.put(
       unitId: Joi.string().required(),
     },
   }),
-  assetController.create,
+  assetController.update,
 );
 
 assetRoutes.delete(
