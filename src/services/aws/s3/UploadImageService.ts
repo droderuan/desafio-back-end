@@ -18,7 +18,7 @@ export default class UploadImageService {
   public async execute(fileName: string): Promise<string> {
     const filePath = path.resolve(UploadConfig.tmpFolder, fileName);
 
-    const file = await fs.promises.readFile(filePath, { encoding: 'base64' });
+    const file = await fs.promises.readFile(filePath);
 
     const contentType = mime.getType(filePath);
 
@@ -26,10 +26,16 @@ export default class UploadImageService {
       throw new AppError('File was not found. Try again', 500);
     }
 
+    const bucketName = process.env.AWS_S3_BUCKET;
+
+    if (!bucketName) {
+      throw new AppError('Missing bucket name. Please, verify your .env');
+    }
+
     try {
       await this.s3Client
         .putObject({
-          Bucket: 'desafio-tractian',
+          Bucket: bucketName,
           Key: fileName,
           ACL: 'public-read',
           Body: file,
@@ -37,7 +43,7 @@ export default class UploadImageService {
         })
         .promise();
 
-      return file;
+      return fileName;
     } catch (err) {
       throw new AppError(err);
     } finally {

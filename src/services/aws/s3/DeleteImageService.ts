@@ -12,10 +12,18 @@ export default class UploadImageService {
   }
 
   public async execute(fileName: string): Promise<void> {
+    const bucketName = process.env.AWS_S3_BUCKET;
+
+    if (!bucketName) {
+      throw new AppError(
+        'Missing bucket name. Please, verify your environment variables',
+      );
+    }
+
     try {
       await this.s3Client
         .deleteObject({
-          Bucket: 'desafio-tractian',
+          Bucket: bucketName,
           Key: fileName,
         })
         .promise();

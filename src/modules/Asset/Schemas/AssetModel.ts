@@ -9,10 +9,15 @@ export interface IAssetModel extends Document {
   type: string;
   modelName: string;
   state: string;
-  healthScore: number;
+  healthscore: number;
   responsible: IUserModel;
   company: string;
   unit: IUnitModel;
+  image: {
+    name: string;
+    description: string;
+    url: string | null;
+  };
 }
 
 const assetSchema = new Schema(
@@ -54,5 +59,18 @@ const assetSchema = new Schema(
   },
   { timestamps: true },
 );
+
+assetSchema.pre<IAssetModel>('save', async function (this: IAssetModel) {
+  this.image.url = this.image.name
+    ? `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${this.image.name}`
+    : null;
+});
+
+assetSchema.pre<IAssetModel>('remove', async function (this: IAssetModel) {
+  await this.model('User').findOneAndUpdate(
+    { _id: this.responsible },
+    { $pull: { responsibleAssets: this._id } },
+  );
+});
 
 export default model<IAssetModel>('Asset', assetSchema);

@@ -40,6 +40,9 @@ assetRoutes.patch(
     [Segments.PARAMS]: {
       assetId: Joi.string().required(),
     },
+    [Segments.BODY]: {
+      description: Joi.string().default(''),
+    },
   }),
   upload.single('image'),
   imageAssetController.update,
@@ -50,9 +53,6 @@ assetRoutes.delete(
   celebrate({
     [Segments.PARAMS]: {
       assetId: Joi.string().required(),
-    },
-    [Segments.BODY]: {
-      fileName: Joi.string().required(),
     },
   }),
   imageAssetController.delete,
