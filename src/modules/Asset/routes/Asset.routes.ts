@@ -1,9 +1,13 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
+import multer from 'multer';
+
+import uploadConfig from '@config/multer/Upload';
 
 import AssetController from '../controllers/AssetController';
 
 const assetController = new AssetController();
+const upload = multer(uploadConfig.multer);
 
 const assetRoutes = Router();
 
@@ -25,6 +29,17 @@ assetRoutes.post(
     },
   }),
   assetController.create,
+);
+
+assetRoutes.patch(
+  '/:assetId/image',
+  celebrate({
+    [Segments.PARAMS]: {
+      assetId: Joi.string().required(),
+    },
+  }),
+  upload.single('image'),
+  (req, res) => res.json(req.file.filename),
 );
 
 export default assetRoutes;
