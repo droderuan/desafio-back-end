@@ -5,8 +5,11 @@ import multer from 'multer';
 import uploadConfig from '@config/multer/Upload';
 
 import AssetController from '../controllers/AssetController';
+import ImageAssetController from '../controllers/ImageAssetController';
 
 const assetController = new AssetController();
+const imageAssetController = new ImageAssetController();
+
 const upload = multer(uploadConfig.multer);
 
 const assetRoutes = Router();
@@ -39,7 +42,20 @@ assetRoutes.patch(
     },
   }),
   upload.single('image'),
-  (req, res) => res.json(req.file.filename),
+  imageAssetController.update,
+);
+
+assetRoutes.delete(
+  '/:assetId/image',
+  celebrate({
+    [Segments.PARAMS]: {
+      assetId: Joi.string().required(),
+    },
+    [Segments.BODY]: {
+      fileName: Joi.string().required(),
+    },
+  }),
+  imageAssetController.delete,
 );
 
 export default assetRoutes;
