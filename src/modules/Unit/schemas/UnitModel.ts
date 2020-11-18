@@ -1,11 +1,12 @@
 import { Schema, model, Document } from 'mongoose';
 
-import { ICompanyDoc } from '@modules/Company/schemas/CompanyModel';
+import { ICompanyModel } from '@modules/Company/schemas/CompanyModel';
+import { IAssetModel } from '@modules/Asset/Schemas/AssetModel';
 
-export interface IUnitDoc extends Document {
+export interface IUnitModel extends Document {
   name: string;
-  company: ICompanyDoc;
-  isDeleted: boolean;
+  company: ICompanyModel;
+  assets: IAssetModel[];
 }
 
 const unitSchema = new Schema(
@@ -15,16 +16,16 @@ const unitSchema = new Schema(
       required: true,
     },
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
-    isDeleted: { type: Boolean, default: false },
+    assets: [{ type: Schema.Types.ObjectId, ref: 'Asset' }],
   },
   { timestamps: true },
 );
 
-unitSchema.pre<IUnitDoc>('remove', async function (this: IUnitDoc) {
+unitSchema.pre<IUnitModel>('remove', async function (this: IUnitModel) {
   await this.model('Company').findOneAndUpdate(
     { _id: this.company },
     { $pull: { units: this._id } },
   );
 });
 
-export default model<IUnitDoc>('Unit', unitSchema);
+export default model<IUnitModel>('Unit', unitSchema);

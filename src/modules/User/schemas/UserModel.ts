@@ -1,10 +1,13 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface IUserDoc extends Document {
+import { ICompanyModel } from '@modules/Company/schemas/CompanyModel';
+import { IAssetModel } from '@modules/Asset/Schemas/AssetModel';
+
+export interface IUserModel extends Document {
   name: string;
   email: string;
-  company: string;
-  responsibleAssets: string[];
+  company: ICompanyModel;
+  responsibleAssets: IAssetModel[];
 }
 
 const UserSchema = new Schema(
@@ -23,11 +26,16 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
-UserSchema.pre<IUserDoc>('remove', async function (this: IUserDoc) {
+UserSchema.pre<IUserModel>('remove', async function (this: IUserModel) {
   await this.model('Company').findOneAndUpdate(
     { _id: this.company },
     { $pull: { employeers: this._id } },
   );
+
+  await this.model('Asset').updateMany(
+    { _id: { $in: this.responsibleAssets } },
+    { responsible: null },
+  );
 });
 
-export default model<IUserDoc>('User', UserSchema);
+export default model<IUserModel>('User', UserSchema);

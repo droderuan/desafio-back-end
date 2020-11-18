@@ -19,7 +19,7 @@ class UnitController {
     const companyId = request.company.id;
 
     const companyToUpdate = await CompanyModel.findById(companyId).populate({
-      path: 'Unit',
+      path: 'units',
       select: { name: 1 },
     });
 
@@ -30,7 +30,7 @@ class UnitController {
     const checkUnit = companyToUpdate.units.find(unit => unit.name === name);
 
     if (checkUnit) {
-      return response.status(400).json({ error: 'Unit name already exist' });
+      throw new AppError(`Unit name already exist`, 400);
     }
 
     const unit = new UnitModel({ name, company: companyId });
@@ -55,15 +55,25 @@ class UnitController {
       { new: true, useFindAndModify: false },
     );
 
+    if (!unit) {
+      throw new AppError('Unit was not found. Check the id', 400);
+    }
+
     return response.json(unit);
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
     const { unitId } = request.params;
 
-    const unit = await UnitModel.find({ _id: unitId });
+    const unit = await UnitModel.findOne({ _id: unitId });
 
-    return response.json(unit);
+    if (!unit) {
+      throw new AppError('Unit was not found. Check the id', 400);
+    }
+
+    unit.remove();
+
+    return response.status(200).json();
   }
 }
 

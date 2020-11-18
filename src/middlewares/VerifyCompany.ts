@@ -15,7 +15,7 @@ export default async function VerifyCompany(
   if (!checkCompany) {
     throw new AppError(
       `The company with id ${companyId} did not match any company. Check the ID.`,
-      400,
+      403,
     );
   }
 

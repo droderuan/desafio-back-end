@@ -1,13 +1,18 @@
 import { Schema, model, Document } from 'mongoose';
 
-import { ICompanyDoc } from '@modules/Company/schemas/CompanyModel';
+import { IUserModel } from '@modules/User/schemas/UserModel';
+import { IUnitModel } from '@modules/Unit/schemas/UnitModel';
 
-import { IUnitDoc } from '@modules/Unit/schemas/UnitModel';
-
-export interface IAssetDoc extends Document {
+export interface IAssetModel extends Document {
   name: string;
-  company: ICompanyDoc;
-  unit: IUnitDoc;
+  description: string;
+  type: string;
+  modelName: string;
+  state: string;
+  healthScore: number;
+  responsible: IUserModel;
+  company: string;
+  unit: IUnitModel;
 }
 
 const assetSchema = new Schema(
@@ -20,7 +25,11 @@ const assetSchema = new Schema(
       type: String,
       maxlength: 600,
     },
-    model: {
+    type: {
+      type: String,
+      required: true,
+    },
+    modelName: {
       type: String,
       required: true,
     },
@@ -34,16 +43,16 @@ const assetSchema = new Schema(
     },
     image: {
       name: String,
+      description: String,
       url: {
         type: String,
         default: null,
       },
     },
-    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
-    unit: { type: Schema.Types.ObjectId, ref: 'Unit', required: true },
+    company: { type: Schema.Types.ObjectId, ref: 'Company', default: null },
     responsible: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   },
   { timestamps: true },
 );
 
-export default model<IAssetDoc>('Asset', assetSchema);
+export default model<IAssetModel>('Asset', assetSchema);

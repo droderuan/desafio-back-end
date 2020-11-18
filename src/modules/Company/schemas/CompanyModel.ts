@@ -1,13 +1,13 @@
 import { Schema, model, Document } from 'mongoose';
 
-import { IUnitDoc } from '@modules/Unit/schemas/UnitModel';
-import { IUserDoc } from '@modules/User/schemas/UserModel';
+import { IUnitModel } from '@modules/Unit/schemas/UnitModel';
+import { IUserModel } from '@modules/User/schemas/UserModel';
 
-export interface ICompanyDoc extends Document {
+export interface ICompanyModel extends Document {
   name: string;
   isDeleted: boolean;
-  units: IUnitDoc[];
-  employeers: IUserDoc[];
+  units: IUnitModel[];
+  employeers: IUserModel[];
 }
 
 const companySchema = new Schema(
@@ -28,4 +28,4 @@ const companySchema = new Schema(
   { timestamps: true },
 );
 
-export default model<ICompanyDoc>('Company', companySchema);
+export default model<ICompanyModel>('Company', companySchema);

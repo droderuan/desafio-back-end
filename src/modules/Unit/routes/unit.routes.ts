@@ -44,7 +44,7 @@ unitRoutes.delete(
   '/:unitId',
   celebrate({
     [Segments.PARAMS]: {
-      unitId: Joi.string().required().uuid(),
+      unitId: Joi.string().required(),
     },
   }),
   unitController.delete,
