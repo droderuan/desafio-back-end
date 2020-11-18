@@ -7,8 +7,6 @@ const assetController = new AssetController();
 
 const assetRoutes = Router();
 
-assetRoutes.get('/all', assetController.list);
-
 assetRoutes.post(
   '/',
   celebrate({
