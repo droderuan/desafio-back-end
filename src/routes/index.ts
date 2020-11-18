@@ -6,6 +6,7 @@ import UnitRoutes from '@modules/Unit/routes/unit.routes';
 import UserRoutes from '@modules/User/routes/user.routes';
 import AssetRoutes from '@modules/Asset/routes/Asset.routes';
 import CompanyAssetRoutes from '@modules/Asset/routes/CompanyAssets.routes';
+import ResponsibleAssetRoutes from '@modules/Asset/routes/ResponsibleAsset.routes';
 
 import VerifyCompanyMiddleware from '../middlewares/VerifyCompany';
 
@@ -22,6 +23,11 @@ router.use(
   '/company/:companyId/assets',
   VerifyCompanyMiddleware,
   CompanyAssetRoutes,
+);
+router.use(
+  '/company/:companyId/assets',
+  VerifyCompanyMiddleware,
+  ResponsibleAssetRoutes,
 );
 
 export default router;

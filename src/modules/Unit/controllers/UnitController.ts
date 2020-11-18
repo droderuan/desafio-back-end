@@ -35,13 +35,13 @@ class UnitController {
 
     const unit = new UnitModel({ name, company: companyId });
 
-    const savedUnit = await unit.save();
+    await unit.save();
 
-    companyToUpdate.units.push(savedUnit);
+    companyToUpdate.units.push(unit);
 
     await companyToUpdate.save();
 
-    return response.json(savedUnit);
+    return response.json(unit);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

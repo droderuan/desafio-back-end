@@ -26,12 +26,45 @@ assetRoutes.post(
         .valid('Disponível', 'Em manutenção', 'Desativado')
         .required(),
       healthscore: Joi.number().integer().max(100).required(),
-      responsibleId: Joi.string().required(),
+      responsibleId: Joi.string(),
       unitId: Joi.string().required(),
-      companyId: Joi.string().required(),
     },
   }),
   assetController.create,
+);
+
+assetRoutes.put(
+  '/:assetId',
+  celebrate({
+    [Segments.PARAMS]: {
+      assetId: Joi.string().required(),
+    },
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      description: Joi.string().required(),
+      type: Joi.string().required(),
+      modelName: Joi.string().required(),
+      state: Joi.string()
+        .valid('Disponível', 'Em manutenção', 'Desativado')
+        .required(),
+      healthscore: Joi.number().integer().max(100).required(),
+      unitId: Joi.string().required(),
+    },
+  }),
+  assetController.create,
+);
+
+assetRoutes.delete(
+  '/:assetId/',
+  celebrate({
+    [Segments.PARAMS]: {
+      assetId: Joi.string().required(),
+    },
+    [Segments.BODY]: {
+      unitId: Joi.string(),
+    },
+  }),
+  assetController.delete,
 );
 
 assetRoutes.patch(

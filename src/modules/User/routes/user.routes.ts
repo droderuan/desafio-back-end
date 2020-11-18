@@ -13,7 +13,6 @@ userRoutes.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().required(),
-      companyId: Joi.string().required(),
     },
   }),
   userController.create,
