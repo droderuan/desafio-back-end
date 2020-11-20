@@ -33,14 +33,6 @@ class CompanyController {
   public async create(request: Request, response: Response): Promise<Response> {
     const data = request.body;
 
-    const checkCompanyExist = await CompanyModel.findOne({
-      name: data.name,
-    }).exec();
-
-    if (checkCompanyExist) {
-      throw new AppError('Company name already in use');
-    }
-
     const company = await CompanyModel.create(data);
 
     return response.json(company);
