@@ -52,7 +52,7 @@ class CompanyController {
     const { name } = request.body;
 
     if (!companyId || !name) {
-      throw new AppError('Id and Name required');
+      throw new AppError('Id and Name required', 400);
     }
 
     const company = await CompanyModel.findOneAndUpdate(
