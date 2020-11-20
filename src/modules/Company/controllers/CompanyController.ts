@@ -12,10 +12,10 @@ class CompanyController {
       {
         path: 'units',
         select: { __v: 0, createdAt: 0, updatedAt: 0, company: 0 },
-        populate: {
-          path: 'assets',
-          select: { __v: 0, createdAt: 0, updatedAt: 0, company: 0 },
-        },
+      },
+      {
+        path: 'assets',
+        select: { __v: 0, createdAt: 0, updatedAt: 0, company: 0 },
       },
       {
         path: 'employeers',

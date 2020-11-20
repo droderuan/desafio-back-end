@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import AppError from '@errors/AppError';
+import CompanyModel from '@modules/Company/schemas/CompanyModel';
 import UserModel from '@modules/User/schemas/UserModel';
 import UnitModel from '@modules/Unit/schemas/UnitModel';
 import AssetModel from '../Schemas/AssetModel';
@@ -54,7 +55,12 @@ export default class AssetController {
       company: companyId,
       ...bodyData,
     });
+
     await newAsset.save();
+
+    const company = await CompanyModel.findById(companyId);
+    company?.assets.push(newAsset);
+    await company?.save();
 
     unit.assets.push(newAsset);
     await unit.save();
