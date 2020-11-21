@@ -19,7 +19,13 @@ class CompanyController {
             createdAt: 0,
             updatedAt: 0,
             company: 0,
-            responsible: 0,
+          },
+          populate: {
+            path: 'responsible',
+            select: {
+              _id: 1,
+              name: 1,
+            },
           },
         },
       },
