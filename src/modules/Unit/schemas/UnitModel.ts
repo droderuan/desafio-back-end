@@ -11,7 +11,6 @@ export interface IUnitModel extends Document {
   disable: number;
   onAlert: number;
   onCritical: number;
-  nextMaintenanceAssetSchedule: Date;
   company: ICompanyModel;
   assets: IAssetModel[];
   removeAsset(this: IUnitModel, assetId: string): void;
