@@ -2,6 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 import { IUserModel } from '@modules/User/schemas/UserModel';
 import { IUnitModel } from '@modules/Unit/schemas/UnitModel';
+import randomNumber from '../../../utils/randomNumber';
 
 export interface IAssetModel extends Document {
   name: string;
@@ -60,10 +61,18 @@ const assetSchema = new Schema(
   { timestamps: true },
 );
 
+assetSchema.set('toObject', { virtuals: true });
+assetSchema.set('toJSON', { virtuals: true });
+
+assetSchema.virtual('avgDecreaseHealthScore').get(function (this: IAssetModel) {
+  return randomNumber(0, 5);
+});
+
 assetSchema.pre<IAssetModel>('save', async function (this: IAssetModel) {
   this.image.url = this.image.name
     ? `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${this.image.name}`
     : null;
+  this.healthscore = randomNumber(55, 100);
 });
 
 assetSchema.pre<IAssetModel>('remove', async function (this: IAssetModel) {
