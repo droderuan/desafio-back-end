@@ -35,7 +35,7 @@ unitSchema.virtual('countAssets').get(function (this: IUnitModel) {
   return this.assets.length;
 });
 
-unitSchema.virtual('inUser').get(function (this: IUnitModel) {
+unitSchema.virtual('inUse').get(function (this: IUnitModel) {
   return this.assets.reduce(
     (total, asset) => (asset.state === 'Disponível' ? total + 1 : total),
     0,
