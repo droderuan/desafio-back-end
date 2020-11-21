@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import { setHours, format } from 'date-fns';
 
 import { IUserModel } from '@modules/User/schemas/UserModel';
 import { IUnitModel } from '@modules/Unit/schemas/UnitModel';
@@ -14,6 +15,7 @@ export interface IAssetModel extends Document {
   responsible: IUserModel;
   company: string;
   unit: IUnitModel;
+  nextMaintanceDate: string;
   image: {
     name: string;
     description: string;
@@ -68,11 +70,20 @@ assetSchema.virtual('avgDecreaseHealthScore').get(function (this: IAssetModel) {
   return randomNumber(0, 5);
 });
 
+assetSchema.virtual('nextMaintanceDate').get(function (this: IAssetModel) {
+  const month = randomNumber(0, 12);
+  const day = randomNumber(0, 31);
+  const year = randomNumber(2021, 2024);
+  const date = new Date(year, month, day);
+  const parsedDate = setHours(date, 12);
+  return format(parsedDate, 'HH:mm - dd/MM/yyyy');
+});
+
 assetSchema.pre<IAssetModel>('save', async function (this: IAssetModel) {
   this.image.url = this.image.name
     ? `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${this.image.name}`
     : null;
-  this.healthscore = randomNumber(55, 100);
+  this.healthscore = randomNumber(40, 95);
 });
 
 assetSchema.pre<IAssetModel>('remove', async function (this: IAssetModel) {

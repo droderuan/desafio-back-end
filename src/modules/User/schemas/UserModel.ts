@@ -20,6 +20,7 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    nextMaintanceDate: Date,
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
     responsibleAssets: [{ type: Schema.Types.ObjectId, ref: 'Asset' }],
   },

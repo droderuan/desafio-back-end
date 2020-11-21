@@ -24,20 +24,6 @@ class CompanyController {
         },
       },
       {
-        path: 'assets',
-        select: { __v: 0, createdAt: 0, updatedAt: 0, company: 0 },
-        populate: {
-          path: 'responsible',
-          select: {
-            __v: 0,
-            createdAt: 0,
-            updatedAt: 0,
-            company: 0,
-            responsibleAssets: 0,
-          },
-        },
-      },
-      {
         path: 'employeers',
         select: { __v: 0, createdAt: 0, updatedAt: 0, company: 0 },
         populate: {
