@@ -99,6 +99,7 @@ export default class AssetController {
 
     if (updatedAsset.unit?.id !== unitId) {
       const unitToUpdate = await UnitModel.findById(unitId);
+
       if (unitToUpdate) {
         unitToUpdate.assets = unitToUpdate.assets.filter(
           asset => asset.id !== updatedAsset.id,
@@ -106,8 +107,8 @@ export default class AssetController {
 
         unitToUpdate.save();
       }
-      unit.assets.push(updatedAsset);
     }
+    unit.assets.push(updatedAsset);
 
     await unit.save();
 
